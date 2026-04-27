@@ -1,12 +1,12 @@
 'use client';
 
 import { motion, useReducedMotion, MotionValue, HTMLMotionProps, Variants } from 'framer-motion';
-import React, { useState, memo, FormEvent, ChangeEvent } from 'react';
-import { 
+import React, { useState, useEffect, memo, FormEvent, ChangeEvent, useRef } from 'react';
+import {
   ChevronRight,
-  Building2, 
-  TrendingUp, 
-  Shield, 
+  Building2,
+  TrendingUp,
+  Shield,
   Award,
   Users,
   MapPin,
@@ -14,8 +14,9 @@ import {
   Mail,
   MessageSquare,
   CheckCircle,
-  ArrowRight, 
+  ArrowRight,
   Star,
+  Search,
   Globe,
   Target,
   Zap,
@@ -25,9 +26,11 @@ import {
   Key,
   Wrench,
   ClipboardCheck,
+  ChevronDown,
   Plus
 } from 'lucide-react';
 import { FaLinkedin, FaInstagram, FaFacebook, FaTwitter } from "react-icons/fa";
+import { useScroll, useTransform } from 'framer-motion';
 
 // ========== TYPE DEFINITIONS ==========
 interface Stat {
@@ -92,8 +95,8 @@ interface FAQItemProps {
 // ========== OPTIMIZED ANIMATION VARIANTS ==========
 const createFadeIn = (delay = 0) => ({
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: { duration: 0.5, delay }
   }
@@ -175,7 +178,7 @@ TestimonialCard.displayName = 'TestimonialCard';
 
 const FAQItem = memo<FAQItemProps>(({ faq, idx }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -216,7 +219,6 @@ FAQItem.displayName = 'FAQItem';
 
 // ========== MAIN COMPONENT ==========
 export default function Home() {
-  const prefersReducedMotion = useReducedMotion();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -224,6 +226,14 @@ export default function Home() {
     service: 'Property Valuation',
     message: ''
   });
+
+  // Scroll helpers
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -244,15 +254,19 @@ export default function Home() {
   };
 
   const handleBookConsultation = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToSection('contact');
   };
 
   const handleWhatsApp = () => {
     window.open('https://wa.me/971501234567', '_blank');
   };
+
+  const [location, setLocation] = useState<string>("Dubai");
+  const [propertyType, setPropertyType] = useState<string>("Apartment");
+  const [priceRange, setPriceRange] = useState<string>("Max Price");
+
+  const navLinks = ["About", "Services", "Management", "FAQ", "Contact"];
+  const suggestions = ["Apartment", "Duplexes", "Mannor", "Commercial", "Swimming pool"];
 
   // Data arrays with proper typing
   const stats: Stat[] = [
@@ -379,144 +393,710 @@ export default function Home() {
     }
   ];
 
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const faqRef = useRef<HTMLElement>(null);
+
+  // Background image loaded state
+  const [loaded, setLoaded] = useState(false);
+
+  const [activeNav, setActiveNav] = useState<string>("Home");
+
+  const locations = ["Los Angeles", "Dubai Marina", "Downtown Dubai", "Palm Jumeirah", "Beverly Hills"];
+  const propertyTypes = ["Apartment", "Duplex", "Mansion", "Commercial", "Villa"];
+  const priceRanges = ["Max Price", "Below AED 1M", "AED 1M - 2M", "AED 2M - 4M", "Above AED 4M"];
+
+  const toggleDropdown = (name: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpenDropdown(prev => (prev === name ? null : name));
+  };
+
+  const closeAllDropdowns = () => {
+    setOpenDropdown(null);
+  };
+
+  const handleExplore = () => scrollToSection('services');
+  const handleConsult = () => scrollToSection('contact');
+  const handleLetstalk = () => scrollToSection('contact');
+  const handleSearch = () => alert(`🔍 Searching: Location: ${location}, Type: ${propertyType}, Price: ${priceRange}\n(Interactive demo — full listing integration ready)`);
+  const handleChipClick = (chip: string) => alert(`🔍 Filtering by "${chip}" properties`);
+
+  const handleNavClick = (link: string) => {
+    setActiveNav(link);
+    if (link === "Home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      const id = link.toLowerCase();
+      scrollToSection(id);
+    }
+    setSidebarOpen(false);
+  };
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoaded(true), 80);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
       {/* Navigation */}
-      <motion.nav 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-gray-200"
+      <div
+        onClick={closeAllDropdowns}
+        style={{
+          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          position: "relative",
+          minHeight: "88vh",
+          overflow: "hidden",
+          background: "#0a0d06",
+        }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-semibold text-gray-900 tracking-tight">
-                AFS Real Estate
-              </span>
-            </div>
-            
-            <div className="hidden md:flex items-center space-x-7">
-              <a href="#about" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">About</a>
-              <a href="#services" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">Services</a>
-              <a href="#management" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">Management</a>
-              <a href="#faq" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">FAQ</a>
-              <a href="#contact" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">Contact</a>
-            </div>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleBookConsultation}
-              className="bg-amber-500 text-white px-5 py-2 rounded-full font-medium text-sm shadow-md hover:bg-amber-600 transition-all"
-              type="button"
-            >
-              Book Consultation
-            </motion.button>
-          </div>
+          .af-ui { font-family: 'Inter', sans-serif; }
+
+          /* BG image */
+          .af-bg {
+            position: absolute; inset: 0; z-index: 0;
+          }
+          .af-bg img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: brightness(0.78) saturate(0.9) contrast(1.02);
+            transform: scale(1.04);
+            transition: transform 8s ease;
+          }
+          .af-bg img.loaded { transform: scale(1); }
+
+          /* Cinematic overlays - softer, brighter fade (like reference image) */
+          .af-overlay-left {
+            position: absolute; inset: 0;
+            background: linear-gradient(105deg, rgba(5,8,3,0.88) 0%, rgba(5,8,3,0.72) 45%, transparent 80%);
+          }
+          .af-overlay-bottom {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 35%;
+            background: linear-gradient(to top, rgba(5,8,3,0.55), transparent 70%);
+          }
+
+          /* Noise texture */
+          .af-noise {
+            position: absolute; inset: 0; opacity: 0.02; z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+          }
+
+          /* Animations */
+          @keyframes af-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes af-fade { from { opacity: 0; } to { opacity: 1; } }
+
+          .af-a1 { animation: af-up 0.9s cubic-bezier(.22,.68,0,1) 0.1s both; }
+          .af-a2 { animation: af-up 0.9s cubic-bezier(.22,.68,0,1) 0.28s both; }
+          .af-a3 { animation: af-up 0.9s cubic-bezier(.22,.68,0,1) 0.44s both; }
+          .af-a4 { animation: af-up 0.9s cubic-bezier(.22,.68,0,1) 0.58s both; }
+          .af-a5 { animation: af-up 0.9s cubic-bezier(.22,.68,0,1) 0.72s both; }
+          .af-nav-anim { animation: af-fade 0.7s ease 0.05s both; }
+
+          /* Nav */
+          .af-nav {
+            position: relative; z-index: 50;
+            padding: 22px 32px 0;
+          }
+          .af-nav-inner {
+            max-width: 1240px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 14px 28px;
+            background: rgba(8,11,5,0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+          }
+          .af-logo {
+            font-size: 17px; font-weight: 600;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            color: #fff;
+          }
+          .af-logo span { color: #c98a02; }
+
+          .af-navlinks { display: flex; align-items: center; gap: 36px; }
+          .af-navlink {
+            background: none; border: none; cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px; font-weight: 400;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.04em;
+            padding: 0; position: relative;
+            transition: color 0.2s;
+          }
+          .af-navlink::after {
+            content: '';
+            position: absolute; bottom: -3px; left: 0;
+            width: 0; height: 1px; background: #c98a02;
+            transition: width 0.25s ease;
+          }
+          .af-navlink:hover { color: #fff; }
+          .af-navlink:hover::after { width: 100%; }
+          .af-navlink.af-active { color: #c98a02; }
+          .af-navlink.af-active::after { width: 100%; }
+
+          .af-cta-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px; font-weight: 500;
+            background: #c98a02; color: #0a0d06;
+            border: none; cursor: pointer;
+            padding: 10px 22px; border-radius: 8px;
+            letter-spacing: 0.04em;
+            transition: background 0.2s, transform 0.15s;
+          }
+          .af-cta-btn:hover { background: #ffd51a; transform: scale(1.02); }
+
+          /* Hamburger */
+          .af-hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px; padding: 10px 12px; cursor: pointer;
+          }
+          .af-hamburger span {
+            display: block; height: 1.5px; background: #fff;
+            border-radius: 2px; transition: all 0.2s;
+          }
+          .af-hamburger span:nth-child(2) { width: 14px; background: #c98a02; }
+
+          /* Mobile sidebar */
+          .af-sidebar {
+            position: fixed; inset: 0; z-index: 200;
+            pointer-events: none;
+          }
+          .af-sidebar.open { pointer-events: all; }
+          .af-sidebar-scrim {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,0); transition: background 0.35s;
+          }
+          .af-sidebar.open .af-sidebar-scrim { background: rgba(0,0,0,0.6); }
+          .af-sidebar-panel {
+            position: absolute; top: 0; left: 0; bottom: 0;
+            width: 280px; background: #0c0f07;
+            border-right: 1px solid rgba(201,240,0,0.12);
+            padding: 0; display: flex; flex-direction: column;
+            transform: translateX(-100%);
+            transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+          }
+          .af-sidebar.open .af-sidebar-panel { transform: translateX(0); }
+          .af-sidebar-header {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex; align-items: center; justify-content: space-between;
+          }
+          .af-sidebar-close {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7); border-radius: 7px;
+            width: 34px; height: 34px; cursor: pointer;
+            font-size: 16px; display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s;
+          }
+          .af-sidebar-close:hover { background: rgba(255,255,255,0.12); }
+          .af-sidebar-links { padding: 16px 16px; flex: 1; }
+          .af-sidebar-link {
+            display: block; width: 100%; text-align: left;
+            background: none; border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px; font-weight: 400;
+            color: rgba(255,255,255,0.65);
+            padding: 13px 16px; border-radius: 9px; cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            letter-spacing: 0.02em;
+          }
+          .af-sidebar-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
+          .af-sidebar-link.af-active-s {
+            background: rgba(201,240,0,0.08);
+            color: #c98a02;
+            border-left: 2px solid #c98a02;
+            padding-left: 14px;
+          }
+          .af-sidebar-footer {
+            padding: 20px 24px 28px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+          }
+
+          /* Hero */
+          .af-hero-content {
+            position: relative; z-index: 10;
+            max-width: 1240px; margin: 0 auto;
+            padding: 64px 32px 56px;
+            display: flex; flex-direction: column;
+            min-height: calc(88vh - 90px);
+            justify-content: space-between;
+          }
+
+          /* Eyebrow */
+          .af-eyebrow {
+            display: inline-flex; align-items: center; gap: 10px;
+            margin-bottom: 28px;
+          }
+          .af-eyebrow-line {
+            width: 32px; height: 1px; background: #c98a02;
+          }
+          .af-eyebrow-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+          }
+
+          /* Headline */
+          .af-h1 {
+            font-size: clamp(46px, 6.5vw, 88px);
+            font-weight: 300;
+            line-height: 1.02;
+            letter-spacing: -0.01em;
+            color: #fff;
+            margin: 0 0 24px;
+          }
+          .af-h1 em {
+            font-style: italic;
+            font-weight: 600;
+            color: #c98a02;
+          }
+
+          .af-body {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(14px, 1.5vw, 16px);
+            line-height: 1.8;
+            color: rgba(255,255,255,0.5);
+            max-width: 460px;
+            margin: 0 0 36px;
+            font-weight: 300;
+          }
+
+          /* Hero CTAs */
+          .af-hero-btns {
+            display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 0;
+          }
+          .af-btn-primary {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px; font-weight: 500;
+            background: #c98a02; color: #0a0d06;
+            border: none; cursor: pointer;
+            padding: 13px 28px; border-radius: 8px;
+            letter-spacing: 0.05em;
+            transition: background 0.2s, transform 0.15s;
+          }
+          .af-btn-primary:hover { background: #ffd51a; transform: scale(1.02); }
+
+          .af-btn-ghost {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px; font-weight: 400;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.18);
+            cursor: pointer;
+            padding: 13px 28px; border-radius: 8px;
+            letter-spacing: 0.04em;
+            transition: border-color 0.2s, color 0.2s;
+          }
+          .af-btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+
+          /* Search panel */
+          .af-search {
+            background: rgba(8,11,5,0.55);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 6px;
+            display: flex; flex-wrap: wrap;
+            gap: 0;
+            max-width: 860px;
+            margin-bottom: 0;
+          }
+
+          .af-search-field {
+            flex: 1 1 160px;
+            padding: 16px 22px;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer; position: relative;
+            min-width: 130px;
+            transition: background 0.15s;
+            border-radius: 10px;
+          }
+          .af-search-field:last-of-type { border-right: none; }
+          .af-search-field:hover { background: rgba(255,255,255,0.04); }
+
+          .af-field-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px; font-weight: 500;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 5px;
+          }
+          .af-field-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; font-weight: 500;
+            color: #fff;
+            display: flex; align-items: center; gap: 6px;
+          }
+          .af-chevron {
+            color: rgba(255,255,255,0.3); font-size: 10px; margin-left: auto;
+          }
+
+          /* Dropdown */
+          .af-dropdown {
+            position: absolute; top: calc(100% + 8px); left: 0;
+            min-width: 200px;
+            background: #111507;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 6px;
+            z-index: 100;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+          }
+          .af-dropdown-item {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; font-weight: 400;
+            color: rgba(255,255,255,0.7);
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.12s, color 0.12s;
+          }
+          .af-dropdown-item:hover { background: rgba(201,240,0,0.1); color: #c98a02; }
+
+          /* Search button */
+          .af-search-btn-wrap { padding: 6px; }
+          .af-search-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px; font-weight: 600;
+            background: #c98a02; color: #0a0d06;
+            border: none; cursor: pointer;
+            padding: 16px 28px;
+            border-radius: 10px;
+            white-space: nowrap;
+            letter-spacing: 0.04em;
+            transition: background 0.2s;
+            display: flex; align-items: center; gap: 8px;
+          }
+          .af-search-btn:hover { background: #ffd51a; }
+
+          /* Chips */
+          .af-chips {
+            display: flex; flex-wrap: wrap;
+            align-items: center; gap: 8px;
+            margin-top: 16px;
+          }
+          .af-chip-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px; font-weight: 500;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+          }
+          .af-chip {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px; font-weight: 400;
+            background: transparent;
+            color: rgba(255,255,255,0.55);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 99px;
+            padding: 6px 14px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+          }
+          .af-chip:hover { border-color: #c98a02; color: #c98a02; }
+
+          /* Vertical stat stripe */
+          .af-stats-stripe {
+            position: absolute; right: 32px; top: 50%;
+            transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 1px;
+            z-index: 20;
+          }
+          .af-stat-item {
+            padding: 18px 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            background: rgba(8,11,5,0.45);
+            backdrop-filter: blur(14px);
+            text-align: center;
+            min-width: 92px;
+          }
+          .af-stat-item + .af-stat-item { margin-top: 8px; }
+          .af-stat-num {
+            font-size: 22px; font-weight: 600;
+            color: #c98a02; line-height: 1;
+            margin-bottom: 4px;
+          }
+          .af-stat-lbl {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px; font-weight: 400;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.3;
+            text-transform: uppercase; letter-spacing: 0.06em;
+          }
+
+          /* FAQ Section */
+          .af-faq-section {
+            position: relative; z-index: 10;
+            max-width: 1060px; margin: 60px auto 80px;
+            padding: 0 32px;
+          }
+          .af-faq-wrapper {
+            background: rgba(8,11,5,0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 28px;
+            padding: 44px 48px;
+          }
+          .af-faq-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 38px; font-weight: 400;
+            color: #fff; letter-spacing: -0.3px;
+            margin-bottom: 12px;
+          }
+          .af-faq-title span { color: #c98a02; font-weight: 600; }
+          .af-faq-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; color: rgba(255,255,255,0.5);
+            margin-bottom: 40px;
+          }
+          .faq-item {
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 20px 0;
+          }
+          .faq-question {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500; font-size: 18px;
+            color: #fff; display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            letter-spacing: -0.2px;
+          }
+          .faq-answer {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; color: rgba(255,255,255,0.65);
+            line-height: 1.6; margin-top: 12px;
+            padding-right: 20px;
+          }
+          .faq-icon {
+            color: #c98a02; font-size: 20px;
+            transition: transform 0.2s;
+          }
+
+          /* Responsive */
+          @media (max-width: 900px) {
+            .af-stats-stripe { display: none; }
+          }
+          @media (max-width: 768px) {
+            .af-navlinks, .af-cta-btn { display: none !important; }
+            .af-hamburger { display: flex !important; }
+            .af-hero-content { padding: 36px 20px 44px; }
+            .af-nav { padding: 16px 16px 0; }
+            .af-nav-inner { padding: 12px 18px; }
+            .af-search { flex-direction: column; }
+            .af-search-field { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .af-search-field:last-of-type { border-bottom: none; }
+            .af-search-btn-wrap { padding: 6px 6px 6px; }
+            .af-search-btn { width: 100%; justify-content: center; }
+            .af-faq-wrapper { padding: 32px 24px; }
+            .faq-question { font-size: 16px; }
+          }
+        `}</style>
+
+        {/* BG with softer fade */}
+        <div className="af-bg">
+          <img
+            src="https://res.cloudinary.com/daxjhteb5/image/upload/v1777258170/ChatGPT_Image_Apr_27_2026_07_48_28_AM_g1otb5.png"
+            alt="Luxury real estate skyline"
+            className={loaded ? "loaded" : ""}
+            onLoad={() => setLoaded(true)}
+          />
+          <div className="af-overlay-left" />
+          <div className="af-overlay-bottom" />
+          <div className="af-noise" />
         </div>
-      </motion.nav>
 
-      {/* Hero Section */}
-      <section className="pt-28 pb-16 px-6 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={slideVariants.left}
-            >
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className="inline-block mb-4"
+        {/* Mobile sidebar */}
+        <div className={`af-sidebar ${sidebarOpen ? "open" : ""}`}>
+          <div className="af-sidebar-scrim" onClick={() => setSidebarOpen(false)} />
+          <div className="af-sidebar-panel">
+            <div className="af-sidebar-header">
+              <span className="af-logo">AFS <span>RE</span></span>
+              <button className="af-sidebar-close" onClick={() => setSidebarOpen(false)}>✕</button>
+            </div>
+            <div className="af-sidebar-links">
+              <button
+                className={`af-sidebar-link ${activeNav === "Home" ? "af-active-s" : ""}`}
+                onClick={() => handleNavClick("Home")}
               >
-                <span className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium tracking-wide">
-                  Premium Property Management
-                </span>
-              </motion.div>
-              
-              <h1 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-5 leading-[1.1] tracking-tight">
-                Your Gateway to
-                <span className="block text-amber-500">
-                  Smart Property Solutions
-                </span>
-              </h1>
-              
-              <p className="text-lg text-gray-600 mb-7 leading-relaxed font-light">
-                Navigate Dubai's dynamic real estate market with confidence. We deliver expert 
-                property management and investment advisory services to help you maximize returns 
-                and minimize hassle.
-              </p>
-              
-              <div className="flex flex-wrap gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleBookConsultation}
-                  className="bg-amber-500 text-white px-7 py-3.5 rounded-full font-medium text-base shadow-lg hover:bg-amber-600 transition-all flex items-center space-x-2"
-                  type="button"
+                Home
+              </button>
+              {navLinks.map((link) => (
+                <button
+                  key={link}
+                  className={`af-sidebar-link ${activeNav === link ? "af-active-s" : ""}`}
+                  onClick={() => handleNavClick(link)}
                 >
-                  <span>Schedule Consultation</span>
-                  <ChevronRight className="w-4 h-4" />
-                </motion.button>
-                
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleWhatsApp}
-                  className="bg-white border border-amber-500/20 text-amber-600 px-7 py-3.5 rounded-full font-medium text-base hover:bg-amber-50 transition-all flex items-center space-x-2 shadow-sm"
-                  type="button"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>WhatsApp Us</span>
-                </motion.button>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={slideVariants.right}
-              className="relative"
-            >
-              <div className="relative bg-gray-50 rounded-3xl p-7 shadow-xl">
-                <div className="bg-white rounded-2xl p-5 shadow-md mb-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm text-gray-500 font-light">Portfolio Growth</span>
-                    <TrendingUp className="w-5 h-5 text-amber-500" />
-                  </div>
-                  <div className="text-4xl font-semibold text-gray-900 mb-1 tracking-tight">+127%</div>
-                  <div className="text-sm text-amber-600 font-medium">Average ROI 2023-2025</div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white rounded-2xl p-4 shadow-md">
-                    <Building2 className="w-7 h-7 text-amber-500 mb-2" />
-                    <div className="text-2xl font-semibold text-gray-900 tracking-tight">$2.8B+</div>
-                    <div className="text-xs text-gray-600 font-light">Assets Managed</div>
-                  </div>
-                  
-                  <div className="bg-white rounded-2xl p-4 shadow-md">
-                    <Users className="w-7 h-7 text-amber-500 mb-2" />
-                    <div className="text-2xl font-semibold text-gray-900 tracking-tight">450+</div>
-                    <div className="text-xs text-gray-600 font-light">HNW Clients</div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+                  {link}
+                </button>
+              ))}
+            </div>
+            <div className="af-sidebar-footer">
+              <button className="af-btn-primary" style={{ width: "100%", padding: "14px 0" }} onClick={handleConsult}>
+                Let's Talk
+              </button>
+            </div>
           </div>
         </div>
-      </section>
+
+        {/* Navbar */}
+        <div className="af-nav af-nav-anim">
+          <div className="af-nav-inner">
+            <span className="af-logo">AFS <span>Real Estate</span></span>
+
+            <nav className="af-navlinks">
+              <button onClick={() => handleNavClick("Home")} className={`af-navlink ${activeNav === "Home" ? "af-active" : ""}`}>
+                Home
+              </button>
+              {navLinks.map((link) => (
+                <button
+                  key={link}
+                  onClick={() => handleNavClick(link)}
+                  className={`af-navlink ${activeNav === link ? "af-active" : ""}`}
+                >
+                  {link}
+                </button>
+              ))}
+            </nav>
+
+            <button className="af-cta-btn" onClick={handleConsult}>Let's Talk →</button>
+
+            <button
+              className="af-hamburger"
+              onClick={(e) => { e.stopPropagation(); setSidebarOpen(true); }}
+            >
+              <span style={{ width: 20 }} />
+              <span />
+              <span style={{ width: 20 }} />
+            </button>
+          </div>
+        </div>
+
+        {/* Hero section */}
+        <div className="af-hero-content">
+          <div style={{ maxWidth: 680 }}>
+            <div className="af-eyebrow af-a1">
+              <div className="af-eyebrow-line" />
+              <span className="af-eyebrow-text">Dubai's Premier Real Estate Partner</span>
+            </div>
+
+            <h1 className="af-h1 af-a2">
+              Your Gateway to<br />
+              <em>Smart Property</em><br />
+              Solutions
+            </h1>
+
+            <p className="af-body af-a3">
+              Navigate Dubai's dynamic real estate market with confidence. We deliver expert property management and investment advisory services to help you maximize returns and minimize hassle.
+            </p>
+
+            <div className="af-hero-btns af-a4">
+              <button className="af-btn-primary" onClick={handleExplore}>Explore Properties →</button>
+              <button className="af-btn-ghost" onClick={handleConsult}>Book Consultation</button>
+            </div>
+          </div>
+
+          {/* Search bar + chips */}
+          <div className="af-a5" style={{ marginTop: 52 }}>
+            <div
+              className="af-search"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Location */}
+              <div className="af-search-field" onClick={(e) => toggleDropdown("loc", e)}>
+                <div className="af-field-label">Location</div>
+                <div className="af-field-value">
+                  {location}
+                  <span className="af-chevron">▾</span>
+                </div>
+                {openDropdown === "loc" && (
+                  <div className="af-dropdown">
+                    {locations.map((l) => (
+                      <div key={l} className="af-dropdown-item" onClick={() => { setLocation(l); setOpenDropdown(null); }}>{l}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Type */}
+              <div className="af-search-field" onClick={(e) => toggleDropdown("type", e)}>
+                <div className="af-field-label">Property Type</div>
+                <div className="af-field-value">
+                  {propertyType}
+                  <span className="af-chevron">▾</span>
+                </div>
+                {openDropdown === "type" && (
+                  <div className="af-dropdown">
+                    {propertyTypes.map((t) => (
+                      <div key={t} className="af-dropdown-item" onClick={() => { setPropertyType(t); setOpenDropdown(null); }}>{t}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Price */}
+              <div className="af-search-field" onClick={(e) => toggleDropdown("price", e)}>
+                <div className="af-field-label">Price Range</div>
+                <div className="af-field-value">
+                  {priceRange}
+                  <span className="af-chevron">▾</span>
+                </div>
+                {openDropdown === "price" && (
+                  <div className="af-dropdown">
+                    {priceRanges.map((p) => (
+                      <div key={p} className="af-dropdown-item" onClick={() => { setPriceRange(p); setOpenDropdown(null); }}>{p}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="af-search-btn-wrap">
+                <button className="af-search-btn" onClick={handleSearch}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                  Search
+                </button>
+              </div>
+            </div>
+
+            {/* Suggestion chips */}
+            <div className="af-chips">
+              <span className="af-chip-label">Popular:</span>
+              {suggestions.map((s) => (
+                <button key={s} className="af-chip" onClick={() => handleChipClick(s)}>{s}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Vertical stats stripe */}
+        <div className="af-stats-stripe af-a3">
+          {[["1,200+", "Properties Sold"], ["AED 4.2B", "Transactions"], ["98%", "Satisfaction"], ["15 Yrs", "In Dubai"]].map(([n, l]) => (
+            <div key={l} className="af-stat-item">
+              <div className="af-stat-num">{n}</div>
+              <div className="af-stat-lbl">{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Stats Section - solid amber background */}
-      <section className="py-14 px-6 bg-[#c98a02]">
+      <section className="py-14 px-6 bg-amber-500">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {stats.map((stat, idx) => (
               <StatCard key={idx} stat={stat} idx={idx} />
             ))}
@@ -526,7 +1106,7 @@ export default function Home() {
 
       {/* Property Management Cards */}
       <section id="services" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto ">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -539,7 +1119,7 @@ export default function Home() {
               Comprehensive Property Solutions
             </h3>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto font-light">
-              From valuation to investment opportunities, we provide end-to-end property services 
+              From valuation to investment opportunities, we provide end-to-end property services
               tailored to your needs.
             </p>
           </motion.div>
@@ -567,16 +1147,16 @@ export default function Home() {
                 Your Trusted Property Management Partner
               </h3>
               <p className="text-gray-600 mb-5 leading-relaxed font-light text-[15px]">
-                Founded in 2013, AFS Real Estate has emerged as Dubai's premier property management 
-                firm. With a deep understanding of the UAE real estate market, we help property owners 
+                Founded in 2013, AFS Real Estate has emerged as Dubai's premier property management
+                firm. With a deep understanding of the UAE real estate market, we help property owners
                 maximize their investments while minimizing day-to-day management responsibilities.
               </p>
               <p className="text-gray-600 mb-7 leading-relaxed font-light text-[15px]">
-                Our team of experienced professionals combines local market expertise with innovative 
-                technology to deliver exceptional results. We don't just manage properties—we build 
+                Our team of experienced professionals combines local market expertise with innovative
+                technology to deliver exceptional results. We don't just manage properties—we build
                 long-term wealth for our clients.
               </p>
-              
+
               <div className="space-y-3">
                 {[
                   'Licensed and regulated by RERA Dubai',
@@ -652,7 +1232,7 @@ export default function Home() {
               Complete Management Solutions
             </h3>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto font-light">
-              From tenant placement to financial reporting, we handle every aspect of property 
+              From tenant placement to financial reporting, we handle every aspect of property
               management so you can focus on growing your portfolio.
             </p>
           </motion.div>
@@ -704,7 +1284,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-20 px-6">
+      <section id="faq" ref={faqRef} className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial="hidden"
@@ -740,7 +1320,7 @@ export default function Home() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={handleBookConsultation}
+              onClick={handleConsult}
               className="bg-white text-amber-600 px-6 py-3 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transition-all"
               type="button"
             >
@@ -758,7 +1338,7 @@ export default function Home() {
             backgroundSize: '40px 40px'
           }}></div>
         </div>
-        
+
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.div
             initial="hidden"
@@ -770,22 +1350,22 @@ export default function Home() {
               Ready to Optimize Your Property Investment?
             </h2>
             <p className="text-lg text-amber-100 mb-9 leading-relaxed font-light">
-              Schedule a consultation with our property management experts. Discover how we can help 
+              Schedule a consultation with our property management experts. Discover how we can help
               you maximize returns and minimize the hassle of property ownership.
             </p>
-            
+
             <div className="flex flex-wrap justify-center gap-3">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={handleBookConsultation}
+                onClick={handleConsult}
                 className="bg-white text-[#1752bf] px-8 py-4 rounded-full font-semibold text-base shadow-xl hover:shadow-2xl transition-all flex items-center space-x-2"
                 type="button"
               >
                 <span>Book Your Consultation</span>
                 <ArrowRight className="w-4 h-4" />
               </motion.button>
-              
+
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -831,7 +1411,7 @@ export default function Home() {
                 Let's Discuss Your Property Needs
               </h3>
               <p className="text-gray-600 mb-7 leading-relaxed font-light text-[15px]">
-                Our property management team is ready to help you optimize your real estate investments. 
+                Our property management team is ready to help you optimize your real estate investments.
                 Reach out through your preferred channel—we respond to all inquiries within 4 business hours.
               </p>
 
@@ -842,7 +1422,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1 text-sm tracking-tight">Dubai Office</h4>
-                    <p className="text-gray-600 text-sm font-light">Business Bay, Dubai<br/>United Arab Emirates</p>
+                    <p className="text-gray-600 text-sm font-light">Business Bay, Dubai<br />United Arab Emirates</p>
                   </div>
                 </div>
 
@@ -852,7 +1432,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1 text-sm tracking-tight">Phone</h4>
-                    <p className="text-gray-600 text-sm font-light">UAE: +971 4 XXX XXXX<br/>Mobile: +971 50 XXX XXXX</p>
+                    <p className="text-gray-600 text-sm font-light">UAE: +971 4 XXX XXXX<br />Mobile: +971 50 XXX XXXX</p>
                   </div>
                 </div>
 
@@ -862,7 +1442,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1 text-sm tracking-tight">Email</h4>
-                    <p className="text-gray-600 text-sm font-light">info@afsrealestate.com<br/>management@afsrealestate.com</p>
+                    <p className="text-gray-600 text-sm font-light">info@afsrealestate.com<br />management@afsrealestate.com</p>
                   </div>
                 </div>
 
@@ -872,7 +1452,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1 text-sm tracking-tight">WhatsApp</h4>
-                    <p className="text-gray-600 text-sm font-light">+971 50 XXX XXXX<br/>Available 9 AM - 9 PM GST</p>
+                    <p className="text-gray-600 text-sm font-light">+971 50 XXX XXXX<br />Available 9 AM - 9 PM GST</p>
                   </div>
                 </div>
               </div>
@@ -894,7 +1474,7 @@ export default function Home() {
               className="bg-white rounded-3xl shadow-xl border border-gray-200 p-7"
             >
               <h4 className="text-2xl font-semibold text-gray-900 mb-6 tracking-tight">Send Us a Message</h4>
-              
+
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
@@ -937,7 +1517,7 @@ export default function Home() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Service of Interest</label>
-                  <select 
+                  <select
                     name="service"
                     value={formData.service}
                     onChange={handleInputChange}
@@ -1056,7 +1636,7 @@ export default function Home() {
               </div>
             </div>
             <p className="text-gray-500 text-xs mt-5 text-center font-light">
-              AFS Real Estate is a licensed property management firm operating under RERA Dubai regulations. 
+              AFS Real Estate is a licensed property management firm operating under RERA Dubai regulations.
               Investment involves risk. Past performance does not guarantee future results.
             </p>
           </div>
