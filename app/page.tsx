@@ -19,7 +19,6 @@ import {
   Globe,
   Target,
   Zap,
-
   DollarSign,
   BarChart3,
   FileText,
@@ -112,7 +111,7 @@ const slideVariants = {
       x: 0,
       transition: {
         duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1]
+        ease: "easeInOut"
       }
     }
   },
@@ -123,7 +122,7 @@ const slideVariants = {
       x: 0,
       transition: {
         duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1]
+        ease: "easeInOut"
       }
     }
   }
@@ -283,7 +282,7 @@ export default function Home() {
 
   const propertyManagement: PropertyService[] = [
     {
-      icon: Home,
+      icon: FileText, // replaced Home with FileText
       title: 'Property Valuation',
       description: 'All-inclusive real estate services to facilitate the easy and confident purchase, sale, and management of your properties.'
     },
