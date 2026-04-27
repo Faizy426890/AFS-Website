@@ -95,10 +95,7 @@ const createFadeIn = (delay = 0) => ({
   visible: { 
     opacity: 1, 
     y: 0,
-    transition: {
-      duration: 0.5,
-      delay,
-    }
+    transition: { duration: 0.5, delay }
   }
 });
 
@@ -124,7 +121,7 @@ const StatCard = memo<StatCardProps>(({ stat, idx }) => (
   >
     <stat.icon className="w-9 h-9 mx-auto mb-2 opacity-90" />
     <div className="text-3xl font-semibold mb-1 tracking-tight">{stat.number}</div>
-    <div className="text-blue-100/80 font-light text-sm">{stat.label}</div>
+    <div className="text-amber-100/80 font-light text-sm">{stat.label}</div>
   </motion.div>
 ));
 
@@ -136,9 +133,9 @@ const PropertyCard = memo<PropertyCardProps>(({ property, idx }) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
     transition={{ delay: idx * 0.06, duration: 0.4 }}
-    className="bg-white p-7 rounded-3xl border border-gray-200 hover:border-blue-200 hover:shadow-xl transition-all duration-300 group"
+    className="bg-white p-7 rounded-3xl border border-gray-200 hover:border-amber-200 hover:shadow-xl transition-all duration-300 group"
   >
-    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+    <div className="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
       <property.icon className="w-7 h-7 text-white" />
     </div>
     <h4 className="text-xl font-semibold text-gray-900 mb-3 tracking-tight">{property.title}</h4>
@@ -158,14 +155,12 @@ const TestimonialCard = memo<TestimonialCardProps>(({ testimonial, idx }) => (
   >
     <div className="flex mb-3">
       {[...Array(testimonial.rating)].map((_, i) => (
-        <Star key={i} className="w-4 h-4 text-blue-500 fill-blue-500" />
+        <Star key={i} className="w-4 h-4 text-amber-500 fill-amber-500" />
       ))}
     </div>
-<p className="text-gray-600 mb-5 leading-relaxed font-light text-[15px] italic">
-  “{testimonial.content}”
-</p>
+    <p className="text-gray-600 mb-5 leading-relaxed font-light text-[15px] italic">"{testimonial.content}"</p>
     <div className="flex items-center space-x-3">
-      <div className="w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-medium text-base">
+      <div className="w-11 h-11 bg-amber-500 rounded-full flex items-center justify-center text-white font-medium text-base">
         {testimonial.name.charAt(0)}
       </div>
       <div>
@@ -200,7 +195,7 @@ const FAQItem = memo<FAQItemProps>(({ faq, idx }) => {
           transition={{ duration: 0.3 }}
           className="flex-shrink-0"
         >
-          <Plus className={`w-5 h-5 ${isOpen ? 'text-blue-600' : 'text-gray-400'}`} />
+          <Plus className={`w-5 h-5 ${isOpen ? 'text-amber-600' : 'text-gray-400'}`} />
         </motion.div>
       </button>
       <motion.div
@@ -269,7 +264,7 @@ export default function Home() {
 
   const propertyManagement: PropertyService[] = [
     {
-      icon: FileText, // Replaced Home with FileText
+      icon: FileText,
       title: 'Property Valuation',
       description: 'All-inclusive real estate services to facilitate the easy and confident purchase, sale, and management of your properties.'
     },
@@ -396,27 +391,27 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl flex items-center justify-center">
+              <div className="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center">
                 <Building2 className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-semibold bg-gradient-to-r from-blue-700 to-blue-600 bg-clip-text text-transparent tracking-tight">
+              <span className="text-xl font-semibold text-gray-900 tracking-tight">
                 AFS Real Estate
               </span>
             </div>
             
             <div className="hidden md:flex items-center space-x-7">
-              <a href="#about" className="text-gray-700 hover:text-blue-600 transition-colors font-light text-[15px]">About</a>
-              <a href="#services" className="text-gray-700 hover:text-blue-600 transition-colors font-light text-[15px]">Services</a>
-              <a href="#management" className="text-gray-700 hover:text-blue-600 transition-colors font-light text-[15px]">Management</a>
-              <a href="#faq" className="text-gray-700 hover:text-blue-600 transition-colors font-light text-[15px]">FAQ</a>
-              <a href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors font-light text-[15px]">Contact</a>
+              <a href="#about" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">About</a>
+              <a href="#services" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">Services</a>
+              <a href="#management" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">Management</a>
+              <a href="#faq" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">FAQ</a>
+              <a href="#contact" className="text-gray-700 hover:text-amber-600 transition-colors font-light text-[15px]">Contact</a>
             </div>
 
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleBookConsultation}
-              className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-5 py-2 rounded-full font-medium text-sm shadow-md hover:shadow-lg transition-all"
+              className="bg-amber-500 text-white px-5 py-2 rounded-full font-medium text-sm shadow-md hover:bg-amber-600 transition-all"
               type="button"
             >
               Book Consultation
@@ -447,7 +442,7 @@ export default function Home() {
               
               <h1 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-5 leading-[1.1] tracking-tight">
                 Your Gateway to
-                <span className="block bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
+                <span className="block text-amber-500">
                   Smart Property Solutions
                 </span>
               </h1>
@@ -463,7 +458,7 @@ export default function Home() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleBookConsultation}
-                  className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-7 py-3.5 rounded-full font-medium text-base shadow-lg hover:shadow-xl transition-all flex items-center space-x-2"
+                  className="bg-amber-500 text-white px-7 py-3.5 rounded-full font-medium text-base shadow-lg hover:bg-amber-600 transition-all flex items-center space-x-2"
                   type="button"
                 >
                   <span>Schedule Consultation</span>
@@ -474,7 +469,7 @@ export default function Home() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleWhatsApp}
-                  className="bg-white border border-blue-600/20 text-blue-600 px-7 py-3.5 rounded-full font-medium text-base hover:bg-blue-50 transition-all flex items-center space-x-2 shadow-sm"
+                  className="bg-white border border-amber-500/20 text-amber-600 px-7 py-3.5 rounded-full font-medium text-base hover:bg-amber-50 transition-all flex items-center space-x-2 shadow-sm"
                   type="button"
                 >
                   <MessageSquare className="w-4 h-4" />
@@ -489,25 +484,25 @@ export default function Home() {
               variants={slideVariants.right}
               className="relative"
             >
-              <div className="relative bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-3xl p-7 shadow-xl">
+              <div className="relative bg-gray-50 rounded-3xl p-7 shadow-xl">
                 <div className="bg-white rounded-2xl p-5 shadow-md mb-4">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm text-gray-500 font-light">Portfolio Growth</span>
-                    <TrendingUp className="w-5 h-5 text-blue-600" />
+                    <TrendingUp className="w-5 h-5 text-amber-500" />
                   </div>
                   <div className="text-4xl font-semibold text-gray-900 mb-1 tracking-tight">+127%</div>
-                  <div className="text-sm text-blue-600 font-medium">Average ROI 2023-2025</div>
+                  <div className="text-sm text-amber-600 font-medium">Average ROI 2023-2025</div>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-white rounded-2xl p-4 shadow-md">
-                    <Building2 className="w-7 h-7 text-blue-600 mb-2" />
+                    <Building2 className="w-7 h-7 text-amber-500 mb-2" />
                     <div className="text-2xl font-semibold text-gray-900 tracking-tight">$2.8B+</div>
                     <div className="text-xs text-gray-600 font-light">Assets Managed</div>
                   </div>
                   
                   <div className="bg-white rounded-2xl p-4 shadow-md">
-                    <Users className="w-7 h-7 text-blue-600 mb-2" />
+                    <Users className="w-7 h-7 text-amber-500 mb-2" />
                     <div className="text-2xl font-semibold text-gray-900 tracking-tight">450+</div>
                     <div className="text-xs text-gray-600 font-light">HNW Clients</div>
                   </div>
@@ -518,8 +513,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-14 px-6 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500">
+      {/* Stats Section - solid amber background */}
+      <section className="py-14 px-6 bg-amber-500">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {stats.map((stat, idx) => (
@@ -539,7 +534,7 @@ export default function Home() {
             variants={createFadeIn()}
             className="text-center mb-14"
           >
-            <h2 className="text-xs font-semibold text-blue-600 mb-3 uppercase tracking-widest">Our Core Services</h2>
+            <h2 className="text-xs font-semibold text-amber-500 mb-3 uppercase tracking-widest">Our Core Services</h2>
             <h3 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-5 tracking-tight">
               Comprehensive Property Solutions
             </h3>
@@ -567,7 +562,7 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               variants={slideVariants.left}
             >
-              <h2 className="text-xs font-semibold text-blue-600 mb-3 uppercase tracking-widest">About AFS Real Estate</h2>
+              <h2 className="text-xs font-semibold text-amber-500 mb-3 uppercase tracking-widest">About AFS Real Estate</h2>
               <h3 className="text-4xl font-semibold text-gray-900 mb-5 tracking-tight">
                 Your Trusted Property Management Partner
               </h3>
@@ -597,7 +592,7 @@ export default function Home() {
                     transition={{ delay: idx * 0.08, duration: 0.4 }}
                     className="flex items-start space-x-2"
                   >
-                    <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
                     <span className="text-gray-700 font-light text-[15px]">{item}</span>
                   </motion.div>
                 ))}
@@ -613,25 +608,25 @@ export default function Home() {
             >
               <div className="grid grid-cols-2 gap-5">
                 <div className="space-y-5">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 p-5 rounded-2xl border border-blue-100/50 shadow-sm">
-                    <Globe className="w-9 h-9 text-blue-600 mb-3" />
+                  <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                    <Globe className="w-9 h-9 text-amber-500 mb-3" />
                     <h4 className="text-lg font-semibold text-gray-900 mb-1 tracking-tight">Dubai-Based</h4>
                     <p className="text-gray-600 text-sm font-light">Strategic office in the heart of Dubai</p>
                   </div>
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 p-5 rounded-2xl border border-purple-100/50 shadow-sm mt-8">
-                    <Shield className="w-9 h-9 text-purple-600 mb-3" />
+                  <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm mt-8">
+                    <Shield className="w-9 h-9 text-amber-500 mb-3" />
                     <h4 className="text-lg font-semibold text-gray-900 mb-1 tracking-tight">Trust & Security</h4>
                     <p className="text-gray-600 text-sm font-light">Fully licensed and insured operations</p>
                   </div>
                 </div>
                 <div className="space-y-5 mt-12">
-                  <div className="bg-gradient-to-br from-green-50 to-green-100/50 p-5 rounded-2xl border border-green-100/50 shadow-sm">
-                    <Target className="w-9 h-9 text-green-600 mb-3" />
+                  <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                    <Target className="w-9 h-9 text-amber-500 mb-3" />
                     <h4 className="text-lg font-semibold text-gray-900 mb-1 tracking-tight">Client-Focused</h4>
                     <p className="text-gray-600 text-sm font-light">Personalized service for every client</p>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 p-5 rounded-2xl border border-blue-100/50 shadow-sm">
-                    <Zap className="w-9 h-9 text-blue-600 mb-3" />
+                  <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                    <Zap className="w-9 h-9 text-amber-500 mb-3" />
                     <h4 className="text-lg font-semibold text-gray-900 mb-1 tracking-tight">Market Expertise</h4>
                     <p className="text-gray-600 text-sm font-light">12+ years of Dubai real estate mastery</p>
                   </div>
@@ -652,7 +647,7 @@ export default function Home() {
             variants={createFadeIn()}
             className="text-center mb-14"
           >
-            <h2 className="text-xs font-semibold text-blue-600 mb-3 uppercase tracking-widest">Property Management</h2>
+            <h2 className="text-xs font-semibold text-amber-500 mb-3 uppercase tracking-widest">Property Management</h2>
             <h3 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-5 tracking-tight">
               Complete Management Solutions
             </h3>
@@ -671,10 +666,10 @@ export default function Home() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: idx * 0.06, duration: 0.4 }}
                 whileHover={{ y: -4 }}
-                className="bg-white p-7 rounded-3xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300"
+                className="bg-white p-7 rounded-3xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-amber-200 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center mb-4">
-                  <service.icon className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center mb-4">
+                  <service.icon className="w-6 h-6 text-amber-500" />
                 </div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2 tracking-tight">{service.title}</h4>
                 <p className="text-gray-600 leading-relaxed font-light text-[15px]">{service.description}</p>
@@ -694,7 +689,7 @@ export default function Home() {
             variants={createFadeIn()}
             className="text-center mb-14"
           >
-            <h2 className="text-xs font-semibold text-blue-600 mb-3 uppercase tracking-widest">Client Success Stories</h2>
+            <h2 className="text-xs font-semibold text-amber-500 mb-3 uppercase tracking-widest">Client Success Stories</h2>
             <h3 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-5 tracking-tight">
               What Our Clients Say
             </h3>
@@ -719,7 +714,7 @@ export default function Home() {
             className="mb-14"
           >
             <div className="text-left mb-8">
-              <h2 className="text-xs font-semibold text-blue-600 mb-3 uppercase tracking-widest">NEED HELP</h2>
+              <h2 className="text-xs font-semibold text-amber-500 mb-3 uppercase tracking-widest">NEED HELP</h2>
               <h3 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-2 tracking-tight">
                 Frequently <span className="italic font-light">Asked Questions</span>
               </h3>
@@ -738,15 +733,15 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ delay: 0.3, duration: 0.4 }}
-            className="mt-12 bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-8 text-white"
+            className="mt-12 bg-amber-500 rounded-3xl p-8 text-white"
           >
             <h4 className="text-2xl font-semibold mb-2 tracking-tight">Still have a questions?</h4>
-            <p className="text-blue-100 mb-6 font-light">Get in touch with AFS Properties today, and let us assist you with confidence and transparency.</p>
+            <p className="text-amber-100 mb-6 font-light">Get in touch with AFS Properties today, and let us assist you with confidence and transparency.</p>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleBookConsultation}
-              className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transition-all"
+              className="bg-white text-amber-600 px-6 py-3 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transition-all"
               type="button"
             >
               CONTACT US
@@ -756,7 +751,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 relative overflow-hidden">
+      <section className="py-20 px-6 bg-amber-500 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
@@ -774,7 +769,7 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-semibold text-white mb-5 tracking-tight">
               Ready to Optimize Your Property Investment?
             </h2>
-            <p className="text-lg text-blue-100 mb-9 leading-relaxed font-light">
+            <p className="text-lg text-amber-100 mb-9 leading-relaxed font-light">
               Schedule a consultation with our property management experts. Discover how we can help 
               you maximize returns and minimize the hassle of property ownership.
             </p>
@@ -784,7 +779,7 @@ export default function Home() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleBookConsultation}
-                className="bg-white text-blue-700 px-8 py-4 rounded-full font-semibold text-base shadow-xl hover:shadow-2xl transition-all flex items-center space-x-2"
+                className="bg-white text-amber-700 px-8 py-4 rounded-full font-semibold text-base shadow-xl hover:shadow-2xl transition-all flex items-center space-x-2"
                 type="button"
               >
                 <span>Book Your Consultation</span>
@@ -795,7 +790,7 @@ export default function Home() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleWhatsApp}
-                className="bg-blue-800 text-white border border-white/20 px-8 py-4 rounded-full font-semibold text-base hover:bg-blue-900 transition-all flex items-center space-x-2"
+                className="bg-amber-600 text-white border border-white/20 px-8 py-4 rounded-full font-semibold text-base hover:bg-amber-700 transition-all flex items-center space-x-2"
                 type="button"
               >
                 <MessageSquare className="w-4 h-4" />
@@ -831,7 +826,7 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               variants={slideVariants.left}
             >
-              <h2 className="text-xs font-semibold text-blue-600 mb-3 uppercase tracking-widest">Get In Touch</h2>
+              <h2 className="text-xs font-semibold text-amber-500 mb-3 uppercase tracking-widest">Get In Touch</h2>
               <h3 className="text-4xl font-semibold text-gray-900 mb-5 tracking-tight">
                 Let's Discuss Your Property Needs
               </h3>
@@ -842,8 +837,8 @@ export default function Home() {
 
               <div className="space-y-5">
                 <div className="flex items-start space-x-3">
-                  <div className="w-11 h-11 bg-blue-50 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-blue-600" />
+                  <div className="w-11 h-11 bg-amber-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-amber-500" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1 text-sm tracking-tight">Dubai Office</h4>
@@ -852,8 +847,8 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-start space-x-3">
-                  <div className="w-11 h-11 bg-blue-50 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-5 h-5 text-blue-600" />
+                  <div className="w-11 h-11 bg-amber-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 text-amber-500" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1 text-sm tracking-tight">Phone</h4>
@@ -862,8 +857,8 @@ export default function Home() {
                 </div>
 
                 <div className="flex items-start space-x-3">
-                  <div className="w-11 h-11 bg-blue-50 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-blue-600" />
+                  <div className="w-11 h-11 bg-amber-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 text-amber-500" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1 text-sm tracking-tight">Email</h4>
@@ -882,7 +877,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mt-8 p-5 bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl border border-blue-100/50">
+              <div className="mt-8 p-5 bg-gray-50 rounded-2xl border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-2 text-sm tracking-tight">Office Hours</h4>
                 <div className="space-y-1 text-gray-600 text-sm font-light">
                   <p><span className="font-medium">Sunday - Thursday:</span> 9:00 AM - 7:00 PM</p>
@@ -909,7 +904,7 @@ export default function Home() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-light"
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-light"
                     placeholder="Your name"
                   />
                 </div>
@@ -922,7 +917,7 @@ export default function Home() {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-light"
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-light"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -935,7 +930,7 @@ export default function Home() {
                     value={formData.phone}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-light"
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-light"
                     placeholder="+971 XX XXX XXXX"
                   />
                 </div>
@@ -946,7 +941,7 @@ export default function Home() {
                     name="service"
                     value={formData.service}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-light"
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all font-light"
                   >
                     <option>Property Valuation</option>
                     <option>Property Management</option>
@@ -965,7 +960,7 @@ export default function Home() {
                     onChange={handleInputChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none font-light"
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all resize-none font-light"
                     placeholder="Tell us about your property needs..."
                   ></textarea>
                 </div>
@@ -974,7 +969,7 @@ export default function Home() {
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3.5 rounded-2xl font-semibold text-base shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2"
+                  className="w-full bg-amber-500 text-white py-3.5 rounded-2xl font-semibold text-base shadow-lg hover:bg-amber-600 transition-all flex items-center justify-center space-x-2"
                 >
                   <span>Send Message</span>
                   <ArrowRight className="w-4 h-4" />
@@ -991,7 +986,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-10 mb-10">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl flex items-center justify-center">
+                <div className="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center">
                   <Building2 className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-lg font-semibold tracking-tight">AFS Real Estate</span>
@@ -1000,16 +995,16 @@ export default function Home() {
                 Your trusted partner for premium property management and investment advisory in Dubai.
               </p>
               <div className="flex space-x-3">
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-amber-500 transition-colors">
                   <FaLinkedin className="w-4 h-4" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-amber-500 transition-colors">
                   <FaInstagram className="w-4 h-4" />
                 </a>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-amber-500 transition-colors">
                   <FaFacebook className="w-4 h-4" />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-amber-500 transition-colors">
                   <FaTwitter className="w-4 h-4" />
                 </a>
               </div>
@@ -1018,33 +1013,33 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-base mb-4 tracking-tight">Services</h4>
               <ul className="space-y-2 text-gray-400 font-light text-sm">
-                <li><a href="#services" className="hover:text-blue-400 transition-colors">Property Valuation</a></li>
-                <li><a href="#management" className="hover:text-blue-400 transition-colors">Property Management</a></li>
-                <li><a href="#services" className="hover:text-blue-400 transition-colors">Investment Opportunities</a></li>
-                <li><a href="#management" className="hover:text-blue-400 transition-colors">Tenant Placement</a></li>
-                <li><a href="#management" className="hover:text-blue-400 transition-colors">Maintenance Services</a></li>
+                <li><a href="#services" className="hover:text-amber-400 transition-colors">Property Valuation</a></li>
+                <li><a href="#management" className="hover:text-amber-400 transition-colors">Property Management</a></li>
+                <li><a href="#services" className="hover:text-amber-400 transition-colors">Investment Opportunities</a></li>
+                <li><a href="#management" className="hover:text-amber-400 transition-colors">Tenant Placement</a></li>
+                <li><a href="#management" className="hover:text-amber-400 transition-colors">Maintenance Services</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold text-base mb-4 tracking-tight">Quick Links</h4>
               <ul className="space-y-2 text-gray-400 font-light text-sm">
-                <li><a href="#about" className="hover:text-blue-400 transition-colors">About Us</a></li>
-                <li><a href="#management" className="hover:text-blue-400 transition-colors">Our Services</a></li>
-                <li><a href="#faq" className="hover:text-blue-400 transition-colors">FAQ</a></li>
-                <li><a href="#contact" className="hover:text-blue-400 transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Careers</a></li>
+                <li><a href="#about" className="hover:text-amber-400 transition-colors">About Us</a></li>
+                <li><a href="#management" className="hover:text-amber-400 transition-colors">Our Services</a></li>
+                <li><a href="#faq" className="hover:text-amber-400 transition-colors">FAQ</a></li>
+                <li><a href="#contact" className="hover:text-amber-400 transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-amber-400 transition-colors">Careers</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold text-base mb-4 tracking-tight">Company</h4>
               <ul className="space-y-2 text-gray-400 font-light text-sm">
-                <li><a href="#about" className="hover:text-blue-400 transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Our Team</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Press & Media</a></li>
-                <li><a href="#contact" className="hover:text-blue-400 transition-colors">Contact</a></li>
+                <li><a href="#about" className="hover:text-amber-400 transition-colors">About Us</a></li>
+                <li><a href="#" className="hover:text-amber-400 transition-colors">Our Team</a></li>
+                <li><a href="#" className="hover:text-amber-400 transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-amber-400 transition-colors">Press & Media</a></li>
+                <li><a href="#contact" className="hover:text-amber-400 transition-colors">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -1055,9 +1050,9 @@ export default function Home() {
                 © 2026 AFS Real Estate. All rights reserved.
               </p>
               <div className="flex space-x-5 text-sm text-gray-400 font-light">
-                <a href="#" className="hover:text-blue-400 transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-blue-400 transition-colors">Terms of Service</a>
-                <a href="#" className="hover:text-blue-400 transition-colors">Legal Disclaimer</a>
+                <a href="#" className="hover:text-amber-400 transition-colors">Privacy Policy</a>
+                <a href="#" className="hover:text-amber-400 transition-colors">Terms of Service</a>
+                <a href="#" className="hover:text-amber-400 transition-colors">Legal Disclaimer</a>
               </div>
             </div>
             <p className="text-gray-500 text-xs mt-5 text-center font-light">
