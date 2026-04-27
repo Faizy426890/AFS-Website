@@ -514,7 +514,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section - solid amber background */}
-      <section className="py-14 px-6 bg-amber-500">
+      <section className="py-14 px-6 bg-[#c98a02]">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {stats.map((stat, idx) => (
@@ -526,7 +526,7 @@ export default function Home() {
 
       {/* Property Management Cards */}
       <section id="services" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto ">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -751,7 +751,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-amber-500 relative overflow-hidden">
+      <section className="py-20 px-6 bg-[#1752bf] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
@@ -779,7 +779,7 @@ export default function Home() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleBookConsultation}
-                className="bg-white text-amber-700 px-8 py-4 rounded-full font-semibold text-base shadow-xl hover:shadow-2xl transition-all flex items-center space-x-2"
+                className="bg-white text-[#1752bf] px-8 py-4 rounded-full font-semibold text-base shadow-xl hover:shadow-2xl transition-all flex items-center space-x-2"
                 type="button"
               >
                 <span>Book Your Consultation</span>
@@ -790,7 +790,7 @@ export default function Home() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleWhatsApp}
-                className="bg-amber-600 text-white border border-white/20 px-8 py-4 rounded-full font-semibold text-base hover:bg-amber-700 transition-all flex items-center space-x-2"
+                className="bg-[#265bbd] text-white border border-white/20 px-8 py-4 rounded-full font-semibold text-base hover:bg-[#1752bf] transition-all flex items-center space-x-2"
                 type="button"
               >
                 <MessageSquare className="w-4 h-4" />
