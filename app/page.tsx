@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion, MotionValue, HTMLMotionProps } from 'framer-motion';
+import { motion, useReducedMotion, MotionValue, HTMLMotionProps, Variants } from 'framer-motion';
 import React, { useState, memo, FormEvent, ChangeEvent } from 'react';
 import { 
   ChevronRight,
@@ -98,33 +98,18 @@ const createFadeIn = (delay = 0) => ({
     transition: {
       duration: 0.5,
       delay,
-      ease: [0.25, 0.1, 0.25, 1]
     }
   }
 });
 
-const slideVariants = {
+const slideVariants: { left: Variants; right: Variants } = {
   left: {
     hidden: { opacity: 0, x: -30 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeInOut"
-      }
-    }
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
   },
   right: {
     hidden: { opacity: 0, x: 30 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeInOut"
-      }
-    }
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
   }
 };
 
@@ -134,7 +119,7 @@ const StatCard = memo<StatCardProps>(({ stat, idx }) => (
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px" }}
-    transition={{ delay: idx * 0.08, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    transition={{ delay: idx * 0.08, duration: 0.4 }}
     className="text-white"
   >
     <stat.icon className="w-9 h-9 mx-auto mb-2 opacity-90" />
@@ -150,7 +135,7 @@ const PropertyCard = memo<PropertyCardProps>(({ property, idx }) => (
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ delay: idx * 0.06, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    transition={{ delay: idx * 0.06, duration: 0.4 }}
     className="bg-white p-7 rounded-3xl border border-gray-200 hover:border-blue-200 hover:shadow-xl transition-all duration-300 group"
   >
     <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -168,7 +153,7 @@ const TestimonialCard = memo<TestimonialCardProps>(({ testimonial, idx }) => (
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-50px" }}
-    transition={{ delay: idx * 0.06, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+    transition={{ delay: idx * 0.06, duration: 0.4 }}
     className="bg-white p-7 rounded-3xl shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300"
   >
     <div className="flex mb-3">
@@ -176,7 +161,9 @@ const TestimonialCard = memo<TestimonialCardProps>(({ testimonial, idx }) => (
         <Star key={i} className="w-4 h-4 text-blue-500 fill-blue-500" />
       ))}
     </div>
-    <p className="text-gray-600 mb-5 leading-relaxed font-light text-[15px] italic">"{testimonial.content}"</p>
+<p className="text-gray-600 mb-5 leading-relaxed font-light text-[15px] italic">
+  “{testimonial.content}”
+</p>
     <div className="flex items-center space-x-3">
       <div className="w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-medium text-base">
         {testimonial.name.charAt(0)}
@@ -199,7 +186,7 @@ const FAQItem = memo<FAQItemProps>(({ faq, idx }) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: idx * 0.05, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ delay: idx * 0.05, duration: 0.4 }}
       className="bg-white rounded-2xl border border-gray-200 overflow-hidden"
     >
       <button
@@ -219,7 +206,7 @@ const FAQItem = memo<FAQItemProps>(({ faq, idx }) => {
       <motion.div
         initial={false}
         animate={{ height: isOpen ? "auto" : 0 }}
-        transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: 0.3 }}
         className="overflow-hidden"
       >
         <div className="px-6 pb-5 text-gray-600 leading-relaxed font-light text-[15px]">
@@ -282,7 +269,7 @@ export default function Home() {
 
   const propertyManagement: PropertyService[] = [
     {
-      icon: FileText, // replaced Home with FileText
+      icon: FileText, // Replaced Home with FileText
       title: 'Property Valuation',
       description: 'All-inclusive real estate services to facilitate the easy and confident purchase, sale, and management of your properties.'
     },
@@ -403,7 +390,7 @@ export default function Home() {
       <motion.nav 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: 0.6 }}
         className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-gray-200"
       >
         <div className="max-w-7xl mx-auto px-6 py-3">
@@ -450,7 +437,7 @@ export default function Home() {
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ delay: 0.2, duration: 0.5 }}
                 className="inline-block mb-4"
               >
                 <span className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium tracking-wide">
@@ -607,7 +594,7 @@ export default function Home() {
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: idx * 0.08, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                    transition={{ delay: idx * 0.08, duration: 0.4 }}
                     className="flex items-start space-x-2"
                   >
                     <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
@@ -682,7 +669,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: idx * 0.06, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{ delay: idx * 0.06, duration: 0.4 }}
                 whileHover={{ y: -4 }}
                 className="bg-white p-7 rounded-3xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300"
               >
