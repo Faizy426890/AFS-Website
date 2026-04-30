@@ -417,15 +417,15 @@ export default function AFS() {
         {/* BG */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1920&h=1080&fit=crop&q=85"
-            alt="Luxury Dubai property interior"
-            onLoad={() => setBgLoaded(true)}
-            className={`w-full h-full object-cover transition-opacity duration-1000 ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
-            style={{ filter: 'brightness(0.38) saturate(0.6) contrast(1.05)' }}
-          />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(110deg,rgba(3,3,3,0.96) 0%,rgba(3,3,3,0.80) 45%, rgba(3,3,3,0.42) 100%)' }} />
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '45%', background: 'linear-gradient(to top,rgba(3,3,3,0.75),transparent)' }} />
-        </div>
+      src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&h=1080&fit=crop&q=90"
+      alt="Dubai luxury real estate skyline"
+      onLoad={() => setBgLoaded(true)}
+      className={`w-full h-full object-cover transition-opacity duration-1000 ${bgLoaded ? 'opacity-100' : 'opacity-100'}`}
+      style={{ filter: 'brightness(0.85) saturate(0.6) contrast(1.09)' }}
+    />
+    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(110deg,rgba(3,3,3,0.96) 0%,rgba(3,3,3,0.80) 45%, rgba(3,3,3,0.42) 100%)' }} />
+    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '45%', background: 'linear-gradient(to top,rgba(3,3,3,0.75),transparent)' }} />
+  </div>
 
         <div className="relative z-10 max-w-[1340px] mx-auto px-6 pt-20 pb-16 flex-1 flex flex-col justify-center">
           <div className="grid lg:grid-cols-2 gap-20 items-center min-h-[75vh]">
